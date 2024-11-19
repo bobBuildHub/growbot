@@ -1,0 +1,28 @@
+"""
+db_utils.py: TinyDB utilities for data management.
+"""
+
+from tinydb import TinyDB, Query
+from tinydb.storages import JSONStorage
+from tinydb.middlewares import CachingMiddleware
+import os
+
+class DatabaseUtils:
+    """
+    Utility class for TinyDB operations.
+    """
+    def __init__(self, db_path="data/growbot.json"):
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+        self.db = TinyDB(db_path, storage=CachingMiddleware(JSONStorage))
+
+    def fetch_all(self, table_name):
+        return self.db.table(table_name).all()
+
+    def insert(self, table_name, data):
+        return self.db.table(table_name).insert(data)
+
+    def update(self, table_name, query, updates):
+        return self.db.table(table_name).update(updates, Query().fragment(query))
+
+    def delete(self, table_name, query):
+        return self.db.table(table_name).remove(Query().fragment(query))

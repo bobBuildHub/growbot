@@ -1,0 +1,41 @@
+"""
+notifications.py: Manages Telegram and email notifications.
+"""
+
+import logging
+from utils.db_utils import DatabaseUtils
+
+logger = logging.getLogger(__name__)
+
+class Notifications:
+    def __init__(self, db_utils, config):
+        """
+        Initialize notifications with database and config.
+        """
+        self.db = db_utils
+        self.config = config
+
+    def send_telegram(self, bot, chat_id, message):
+        """
+        Send a Telegram message.
+        """
+        try:
+            bot.send_message(chat_id=chat_id, text=message)
+            logger.info(f"Sent Telegram message to {chat_id}.")
+            self.log_notification("telegram", chat_id, message)
+        except Exception as e:
+            logger.error(f"Failed to send Telegram message: {e}")
+
+    def log_notification(self, method, recipient, message):
+        """
+        Log a notification.
+        """
+        try:
+            self.db.insert("notifications", {
+                "method": method,
+                "recipient": recipient,
+                "message": message
+            })
+            logger.info("Notification logged.")
+        except Exception as e:
+            logger.error(f"Failed to log notification: {e}")

@@ -1,0 +1,12 @@
+from telegram import Update
+from telegram.ext import CallbackContext
+
+def get_status(update: Update, context: CallbackContext):
+    """Handle the /status command."""
+    status_message = (
+        "🌱 GrowBot Status:\n"
+        "- Bots: Online\n"
+        "- Database: Connected\n"
+        "- Notifications: Enabled\n"
+    )
+    update.message.reply_text(status_message)

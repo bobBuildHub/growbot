@@ -1,0 +1,31 @@
+import os
+
+def create_directory(path):
+    """Ensure that the specified directory exists."""
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def create_file(file_path, content=""):
+    """Create a file with optional content."""
+    create_directory(os.path.dirname(file_path))
+    if not os.path.exists(file_path):
+        with open(file_path, "w") as file:
+            file.write(content)
+
+def setup_project():
+    """Set up the project directory structure and files."""
+    print("Setting up the GrowBot project...")
+
+    # Create directories
+    create_directory("db")
+    create_directory("config")
+    create_directory("logs")
+
+    # Create files
+    create_file("db/growbot.json", "{}")  # TinyDB initialization
+    create_file("config/apikey.env", "# CUSTOMER_BOT_TOKEN=your_customer_token_here\n# ADMIN_BOT_TOKEN=your_admin_token_here\n")
+    create_file("logs/growbot.log", "")
+    print("Setup completed successfully!")
+
+if __name__ == "__main__":
+    setup_project()

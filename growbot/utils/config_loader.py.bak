@@ -1,0 +1,13 @@
+import os
+from dotenv import load_dotenv
+from utils.logger import setup_logger
+
+logger = setup_logger("config_loader", "logs/growbot.log")
+
+def load_env(file_path):
+    """Load environment variables from a .env file."""
+    if not os.path.exists(file_path):
+        logger.error(f"Environment file {file_path} not found!")
+        return
+    load_dotenv(file_path)
+    logger.info(f"Loaded environment variables from {file_path}.")

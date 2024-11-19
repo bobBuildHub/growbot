@@ -1,0 +1,46 @@
+{
+  "tokens": {
+    "admin_bot": "7809993846:AAFl6gDG3mWTXO9uiJU8JJG-PQD1I_nOWZo",
+    "customer_bot": "7586067879:AAEekiQpLrxq1_86zTWWKbFLdj6f5feg2aY"
+  },
+  "logging": {
+    "level": "DEBUG",
+    "file": "logs/system.log",
+    "format": "%(asctime)s - %(levelname)s - %(message)s"
+  },
+  "database": {
+    "main_db": "db/growbot.json",
+    "notifications_db": "data/notifications.json",
+    "logging_db": "data/logs.json"
+  },
+  "thresholds": {
+    "soil_moisture": {
+      "min": 30,
+      "max": 80
+    },
+    "temperature": {
+      "min": 18,
+      "max": 28
+    }
+  },
+  "notifications": {
+    "enabled": true,
+    "default_recipients": ["admin"]
+  },
+  "esp32": {
+    "enabled": true,
+    "ip": "192.168.1.100",
+    "port": 80,
+    "wifi": {
+      "ssid": "YourWiFiSSID",
+      "password": "YourWiFiPassword"
+    }
+  },
+  "ui": {
+    "enable_inline_keyboards": true,
+    "button_layouts": {
+      "customer_bot": ["Status", "Preferences", "Notifications"],
+      "admin_bot": ["Logs", "User Management", "Thresholds"]
+    }
+  }
+}
