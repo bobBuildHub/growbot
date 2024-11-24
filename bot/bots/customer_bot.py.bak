@@ -1,0 +1,25 @@
+import logging
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logging.info(f"Customer Bot /start command used by {update.effective_user.username}")
+    await update.message.reply_text("Welcome to Customer Bot! Type /help for available commands.")
+
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logging.info(f"Customer Bot /help command used by {update.effective_user.username}")
+    await update.message.reply_text("Available commands:\n/start - Welcome message\n/help - Command list")
+
+async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logging.info(f"Customer Bot /status command used by {update.effective_user.username}")
+    await update.message.reply_text("Customer Bot is up and running!")
+
+async def create_customer_bot(token):
+    app = ApplicationBuilder().token(token).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("help", help_command))
+    app.add_handler(CommandHandler("status", status))
+    logging.info("Customer Bot initialized.")
+    await app.run_polling()

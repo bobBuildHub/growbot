@@ -1,0 +1,11 @@
+2024-11-22 00:39:57,276 - INFO - 🚀 Starting Setuping...
+2024-11-22 00:39:57,311 - DEBUG - Attempting to create directory for path: C:\Users\drost\Desktop\GROW\growbot\main.py
+2024-11-22 00:39:57,312 - DEBUG - Writing content to file: C:\Users\drost\Desktop\GROW\growbot\main.py
+2024-11-22 00:39:57,313 - INFO - ✅ File deployed: C:\Users\drost\Desktop\GROW\growbot\main.py
+2024-11-22 00:39:57,313 - DEBUG - Attempting to create directory for path: C:\Users\drost\Desktop\GROW\growbot\config/secret0.env
+2024-11-22 00:39:57,316 - DEBUG - Writing content to file: C:\Users\drost\Desktop\GROW\growbot\config/secret0.env
+2024-11-22 00:39:57,317 - INFO - ✅ File deployed: C:\Users\drost\Desktop\GROW\growbot\config/secret0.env
+2024-11-22 00:39:57,318 - DEBUG - Attempting to create directory for path: C:\Users\drost\Desktop\GROW\growbot\config/secret1.env
+2024-11-22 00:39:57,320 - DEBUG - Writing content to file: C:\Users\drost\Desktop\GROW\growbot\config/secret1.env
+2024-11-22 00:39:57,321 - INFO - ✅ File deployed: C:\Users\drost\Desktop\GROW\growbot\config/secret1.env
+2024-11-22 00:39:57,324 - INFO - ✅ Setuping completed successfully!

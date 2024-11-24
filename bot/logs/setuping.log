@@ -1,0 +1,3 @@
+2024-11-22 19:30:42,133 - INFO - 🚀 Starting Setuping...
+2024-11-22 19:30:42,170 - ERROR - ❌ Failed to create or update file: main.py, Error: [WinError 3] The system cannot find the path specified: ''
+2024-11-22 19:30:42,171 - CRITICAL - ❌ Setuping failed: [WinError 3] The system cannot find the path specified: ''

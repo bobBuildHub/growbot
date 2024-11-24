@@ -1,0 +1,2 @@
+(this["webpackJsonpgrowbot-dashboard"]=this["webpackJsonpgrowbot-dashboard"]||[]).push([[0],{10:function(o,t,e){"use strict";e.r(t);e(1);var r=e(3),n=e.n(r),c=(e(8),e(0));var s=function(){return Object(c.jsx)("div",{children:Object(c.jsx)("h1",{children:"Welcome to GrowBot Dashboard"})})};n.a.render(Object(c.jsx)(s,{}),document.getElementById("root"))},8:function(o,t,e){}},[[10,1,2]]]);
+//# sourceMappingURL=main.e77a41e1.chunk.js.map

@@ -1,0 +1,12 @@
+2024-11-22 00:41:56,874 - INFO - 🚀 Starting selective file updates...
+2024-11-22 00:41:56,908 - DEBUG - Processing file: C:\Users\drost\Desktop\GROW\growbot\main.py
+2024-11-22 00:41:56,914 - INFO - Updating content in: C:\Users\drost\Desktop\GROW\growbot\main.py
+2024-11-22 00:41:56,914 - DEBUG - Processing file: C:\Users\drost\Desktop\GROW\growbot\utils/token_loader.py
+2024-11-22 00:41:56,915 - INFO - Updating content in: C:\Users\drost\Desktop\GROW\growbot\utils/token_loader.py
+2024-11-22 00:41:56,920 - INFO - ✅ Selective updates completed successfully!
+2024-11-22 19:24:33,474 - INFO - 🚀 Starting selective file updates...
+2024-11-22 19:24:33,519 - DEBUG - Processing file: C:\Users\drost\Desktop\GROW\growbot\main.py
+2024-11-22 19:24:33,521 - INFO - No changes needed for: C:\Users\drost\Desktop\GROW\growbot\main.py
+2024-11-22 19:24:33,521 - DEBUG - Processing file: C:\Users\drost\Desktop\GROW\growbot\utils/token_loader.py
+2024-11-22 19:24:33,523 - INFO - No changes needed for: C:\Users\drost\Desktop\GROW\growbot\utils/token_loader.py
+2024-11-22 19:24:33,526 - INFO - ✅ Selective updates completed successfully!
