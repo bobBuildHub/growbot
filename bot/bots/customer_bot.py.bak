@@ -1,25 +1,42 @@
 import logging
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import Updater, CommandHandler
+from utils.token_loader import load_bot_token
+from commands import start, status, help_command
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+# Logging Configuration
+logging.basicConfig(
+    filename="logs/bot.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    logging.info(f"Customer Bot /start command used by {update.effective_user.username}")
-    await update.message.reply_text("Welcome to Customer Bot! Type /help for available commands.")
+def main():
+    """Main function to start the Customer Bot."""
+    logging.info("Starting Customer Bot...")
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    logging.info(f"Customer Bot /help command used by {update.effective_user.username}")
-    await update.message.reply_text("Available commands:\n/start - Welcome message\n/help - Command list")
+    # Load token
+    try:
+        token = load_bot_token("customer")
+    except Exception as e:
+        logging.error(f"Failed to load bot token: {e}")
+        return
 
-async def status(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    logging.info(f"Customer Bot /status command used by {update.effective_user.username}")
-    await update.message.reply_text("Customer Bot is up and running!")
+    # Initialize bot
+    updater = Updater(token=token, use_context=True)
+    dispatcher = updater.dispatcher
 
-async def create_customer_bot(token):
-    app = ApplicationBuilder().token(token).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("help", help_command))
-    app.add_handler(CommandHandler("status", status))
-    logging.info("Customer Bot initialized.")
-    await app.run_polling()
+    # Register commands
+    dispatcher.add_handler(CommandHandler("start", start.command))
+    dispatcher.add_handler(CommandHandler("status", status.command))
+    dispatcher.add_handler(CommandHandler("help", help_command.command))
+
+    # Start polling
+    try:
+        updater.start_polling()
+        logging.info("Customer Bot is running.")
+        updater.idle()  # Keep the bot running
+    except Exception as e:
+        logging.error(f"Error while running the bot: {e}")
+
+if __name__ == "__main__":
+    main()

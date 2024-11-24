@@ -1,0 +1,26 @@
+{
+    "health_check": {
+        "interval_seconds": 120,
+        "enabled": true
+    },
+    "logging": {
+        "system_log": "logs/system.log",
+        "health_log": "logs/health_check.log",
+        "level": "DEBUG"
+    },
+    "database": {
+        "main_db": "database/growbot.db",
+        "telegram_db": "database/telegram.json",
+        "retry_limit": 3
+    },
+    "bots": {
+        "customer_bot": {
+            "token_env_var": "CUSTOMER_BOT_TOKEN",
+            "commands": ["status", "help", "notify"]
+        },
+        "admin_bot": {
+            "token_env_var": "ADMIN_BOT_TOKEN",
+            "commands": ["logs", "manage_users", "thresholds"]
+        }
+    }
+}
