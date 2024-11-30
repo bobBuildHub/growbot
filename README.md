@@ -1,22 +1,22 @@
-# GrowBot
-An IoT bot integrated with Telegram, ESP32, and a web dashboard.
+You are tasked with deploying a Python-based GrowBot project integrated with Flask, MongoDB, and frontend frameworks. 
 
-## Repository Structure
+### Project Goals
+1. Ensure professional deployment with minimal manual intervention.
+2. Handle fallback logic in cases where appFiles or project objects are undefined.
+3. Provide a seamless GitHub workflow for managing the repository.
 
-```
-complete_project_v2/
-├── bot/
-│   ├── main.py
-│   ├── config/
-│   │   ├── config.cfg
-│   │   ├── secret.env
-│   │   └── secret.env.txt
-├── web/
-│   ├── src/
-│   └── package.json
-└── README.md
-```
-### Steps to Import to Bolt
-1. Clone the repository from GitHub.
-2. Install dependencies for `web` and `bot` components.
-3. Run `main.py` for the bot and `npm start` for the web dashboard.
+### Key Requirements
+- Validate the project structure and dynamically fallback if appFiles are not found.
+- Integrate MongoDB for backend operations and ensure error handling for connection issues.
+- Include an optimized `.gitignore` to exclude unnecessary files and secrets.
+- Test and deploy the application locally and on the cloud, ensuring production readiness.
+- Enhance the UI for real-time dashboard updates and ensure mobile-friendly responsiveness.
+
+### Implementation Steps
+1. Validate `project` and fallback to defaults if `appFiles` is not present.
+2. Create a clean and structured `.gitignore` for the repository.
+3. Design a Python script to automate deployment, including dependency installation, secret management, and file integrity checks.
+4. Optimize the Flask app for production with error handling and modular routing.
+5. Test database connectivity, CRUD operations, and real-time updates.
+
+Deploy this project ensuring production-grade reliability and document the process with clear logs and outputs.
