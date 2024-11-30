@@ -1,42 +1,46 @@
+import sys
+import os
 import logging
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import ApplicationBuilder, CommandHandler
+
+# Add parent directory to the system path for imports
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.token_loader import load_bot_token
-from commands import start, status, help_command
+from commands.start import command as start_command
+from commands.status import command as status_command
+from commands.help import command as help_command
 
 # Logging Configuration
 logging.basicConfig(
-    filename="logs/bot.log",
-    level=logging.INFO,
+    filename=os.path.join("logs", "customer_bot.log"),
+    level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 def main():
     """Main function to start the Customer Bot."""
-    logging.info("Starting Customer Bot...")
-
-    # Load token
     try:
+        logging.info("Starting Customer Bot...")
+
+        # Load bot token
         token = load_bot_token("customer")
+        if not token:
+            raise ValueError("Customer bot token is missing or invalid!")
+
+        # Initialize the bot
+        app = ApplicationBuilder().token(token).build()
+
+        # Register commands
+        app.add_handler(CommandHandler("start", start_command))
+        app.add_handler(CommandHandler("status", status_command))
+        app.add_handler(CommandHandler("help", help_command))
+
+        # Start polling
+        logging.info("Customer Bot is running...")
+        app.run_polling()
     except Exception as e:
-        logging.error(f"Failed to load bot token: {e}")
-        return
-
-    # Initialize bot
-    updater = Updater(token=token, use_context=True)
-    dispatcher = updater.dispatcher
-
-    # Register commands
-    dispatcher.add_handler(CommandHandler("start", start.command))
-    dispatcher.add_handler(CommandHandler("status", status.command))
-    dispatcher.add_handler(CommandHandler("help", help_command.command))
-
-    # Start polling
-    try:
-        updater.start_polling()
-        logging.info("Customer Bot is running.")
-        updater.idle()  # Keep the bot running
-    except Exception as e:
-        logging.error(f"Error while running the bot: {e}")
+        logging.error(f"Error starting Customer Bot: {e}")
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
     main()

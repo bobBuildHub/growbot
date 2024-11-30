@@ -1,0 +1,15 @@
+ .admin-panel {
+    margin: 2em;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 0.5em;
+    text-align: left;
+}

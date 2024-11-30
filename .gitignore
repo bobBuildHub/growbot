@@ -1,0 +1,30 @@
+
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+
+# Ignore environment files
+.env
+
+# Ignore logs
+*.log
+logs/
+
+# Ignore virtual environments
+venv/
+*.venv/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore unnecessary IDE files
+*.idea/
+.vscode/
+
+# Node modules
+node_modules/
+deploy_to_github.py
+# Ignore test output or temporary files
+*.tmp
+*.bak

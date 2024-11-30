@@ -1,11 +1,16 @@
-import React from "react";
-import "./styles/main.css";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Alerts from './pages/Alerts';
+import Settings from './pages/Settings';
 
 function App() {
     return (
-        <div>
-            <h1>Welcome to GrowBot Dashboard</h1>
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/alerts" element={<Alerts />} />
+                <Route path="/settings" element={<Settings />} />
+            </Routes>
+        </Router>
     );
 }
 

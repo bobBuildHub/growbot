@@ -1,70 +1,108 @@
-import sys
 import os
-import logging
-from telegram.ext import ApplicationBuilder, CommandHandler
+from typing import Optional
 
-# Add parent directory to the system path for imports
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from utils.token_loader import load_bot_token
-from commands.start import command as start_command
-from commands.status import command as status_command
-from commands.help import command as help_command
 
-# Logging Configuration
-logging.basicConfig(
-    filename=os.path.join("logs", "customer_bot.log"),
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+class TokenLoader:
+    """
+    TokenLoader is a utility class for loading and validating tokens from multiple sources.
+    """
 
-def main():
-    """Main function to start the Customer Bot."""
-    try:
-        logging.info("Starting Customer Bot...")
+    def __init__(self, env_var: Optional[str] = None, file_path: Optional[str] = None):
+        """
+        Initialize the TokenLoader.
 
-        # Load bot token
-        token = load_bot_token("customer")
+        :param env_var: Name of the environment variable to fetch the token from.
+        :param file_path: Path to the file containing the token.
+        """
+        self.env_var = env_var
+        self.file_path = file_path
+        self.token = None  # Stores the loaded token
+
+    def load_from_env(self) -> str:
+        """
+        Load the token from an environment variable.
+
+        :return: The token value from the environment variable.
+        :raises: EnvironmentError if the environment variable is not set.
+        """
+        if not self.env_var:
+            raise ValueError("Environment variable name is not provided.")
+        token = os.getenv(self.env_var)
         if not token:
-            raise ValueError("Customer bot token is missing or invalid!")
+            raise EnvironmentError(f"Environment variable '{self.env_var}' is not set.")
+        return token.strip()
 
-        # Initialize the bot
-        app = ApplicationBuilder().token(token).build()
+    def load_from_file(self) -> str:
+        """
+        Load the token from a file.
 
-        # Register commands
-        app.add_handler(CommandHandler("start", start_command))
-        app.add_handler(CommandHandler("status", status_command))
-        app.add_handler(CommandHandler("help", help_command))
+        :return: The token value from the file.
+        :raises: FileNotFoundError if the file does not exist.
+        :raises: ValueError if the file is empty or cannot be read.
+        """
+        if not self.file_path:
+            raise ValueError("File path is not provided.")
+        if not os.path.exists(self.file_path):
+            raise FileNotFoundError(f"Token file '{self.file_path}' not found.")
+        with open(self.file_path, "r") as file:
+            token = file.read().strip()
+        if not token:
+            raise ValueError(f"Token file '{self.file_path}' is empty.")
+        return token
 
-        # Start polling
-        logging.info("Customer Bot is running...")
-        app.run_polling()
-    except Exception as e:
-        logging.error(f"Error starting Customer Bot: {e}")
-        print(f"Error: {e}")
+    def validate_token(self, token: str, min_length: int = 10) -> bool:
+        """
+        Validate the format and length of the token.
 
+        :param token: The token to validate.
+        :param min_length: Minimum acceptable token length (default: 10).
+        :return: True if the token is valid.
+        :raises: ValueError if the token is invalid.
+        """
+        if len(token) < min_length:
+            raise ValueError(f"Token must be at least {min_length} characters long.")
+        if " " in token:
+            raise ValueError("Token must not contain spaces.")
+        return True
+
+    def load_and_validate(self, source: str, min_length: int = 10) -> str:
+        """
+        Load the token from a specified source and validate it.
+
+        :param source: 'env' to load from environment, 'file' to load from file.
+        :param min_length: Minimum acceptable token length (default: 10).
+        :return: The validated token.
+        :raises: ValueError for invalid sources.
+        """
+        if source == "env":
+            token = self.load_from_env()
+        elif source == "file":
+            token = self.load_from_file()
+        else:
+            raise ValueError("Invalid source. Use 'env' or 'file'.")
+        self.validate_token(token, min_length)
+        self.token = token
+        return token
+
+
+# Example usage for testing TokenLoader
 if __name__ == "__main__":
-    main()
-import os
-import json
+    # Specify your environment variable name or file path
+    ENV_VAR_NAME = "MY_TOKEN_ENV"
+    FILE_PATH = r"C:\Users\drost\Desktop\GROW\growbot\complete_project_v2\bot\secret.env.txt"
 
-def load_bot_token(bot_type):
-    """
-    Loads the bot token from a JSON configuration file.
-    Args:
-        bot_type (str): 'customer' or 'admin'.
-    Returns:
-        str: Bot token.
-    """
-    config_path = os.path.join(os.path.dirname(__file__), "..", "config", "bot_config.json")
+    try:
+        print("Loading token from environment variable...")
+        loader = TokenLoader(env_var=ENV_VAR_NAME)
+        token = loader.load_and_validate(source="env")
+        print(f"Token loaded and validated from environment: {token}")
+    except Exception as e:
+        print(f"Error loading token from environment: {e}")
 
-    if not os.path.exists(config_path):
-        raise FileNotFoundError(f"Configuration file not found: {config_path}")
-
-    with open(config_path, "r", encoding="utf-8") as file:
-        config = json.load(file)
-
-    token_key = f"{bot_type}_bot_token"
-    if token_key not in config or not config[token_key]:
-        raise ValueError(f"Bot token for '{bot_type}' not found or invalid in configuration.")
-
-    return config[token_key]
+    try:
+        print("\nLoading token from file...")
+        loader = TokenLoader(file_path=FILE_PATH)
+        token = loader.load_and_validate(source="file")
+        print(f"Token loaded and validated from file: {token}")
+    except Exception as e:
+        print(f"Error loading token from file: {e}")

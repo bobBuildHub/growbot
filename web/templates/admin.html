@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - GrowBot</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1>Admin Panel</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Dashboard</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- User Management -->
+        <section id="user-management">
+            <h2>User Management</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <button class="delete-btn" onclick="deleteUser({{ user.id }})">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Add New User -->
+        <section id="add-user">
+            <h2>Add a New User</h2>
+            <form method="POST" action="/api/users">
+                <div class="form-group">
+                    <label for="user-name">Name:</label>
+                    <input type="text" id="user-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="user-email">Email:</label>
+                    <input type="email" id="user-email" name="email" required>
+                </div>
+                <button type="submit" class="submit-btn">Add User</button>
+            </form>
+        </section>
+
+        <!-- Manage Gardens -->
+        <section id="garden-management">
+            <h2>Manage Gardens</h2>
+            <div id="garden-list">
+                {% for garden in gardens %}
+                <div class="garden-item">
+                    <h3>{{ garden.name }}</h3>
+                    <p>Location: {{ garden.location }}</p>
+                    <p>Owner: {{ garden.user_id }}</p>
+                    <button class="delete-btn" onclick="deleteGarden({{ garden.id }})">Delete</button>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 GrowBot. Admin Tools</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        function deleteUser(userId) {
+            if (confirm("Are you sure you want to delete this user?")) {
+                fetch(`/api/users/${userId}`, { method: "DELETE" })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("User deleted successfully.");
+                            location.reload();
+                        } else {
+                            alert("Failed to delete user.");
+                        }
+                    });
+            }
+        }
+
+        function deleteGarden(gardenId) {
+            if (confirm("Are you sure you want to delete this garden?")) {
+                fetch(`/api/gardens/${gardenId}`, { method: "DELETE" })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Garden deleted successfully.");
+                            location.reload();
+                        } else {
+                            alert("Failed to delete garden.");
+                        }
+                    });
+            }
+        }
+    </script>
+</body>
+</html>

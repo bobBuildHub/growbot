@@ -1,23 +1,15 @@
-# admin_bot.py
+
 import logging
 from telegram.ext import ApplicationBuilder, CommandHandler
 
+logging.basicConfig(level=logging.INFO)
+TOKEN = os.getenv("ADMIN_BOT_TOKEN", "admin-token-placeholder")
+
 async def start(update, context):
-    logging.info(f"Admin Bot /start command used by {update.effective_user.username}")
-    await update.message.reply_text("Welcome to the Admin Bot! Type /help for available commands.")
+    await update.message.reply_text("Admin Bot is running!")
 
-async def help_command(update, context):
-    logging.info(f"Admin Bot /help command used by {update.effective_user.username}")
-    await update.message.reply_text("Available commands:\n/start\n/help")
+app = ApplicationBuilder().token(TOKEN).build()
+app.add_handler(CommandHandler("start", start))
 
-def create_admin_bot(token):
-    """
-    Creates and starts the Admin Bot.
-    Args:
-        token (str): The bot token for Admin Bot.
-    """
-    logging.info("🚀 Initializing Admin Bot...")
-    app = ApplicationBuilder().token(token).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("help", help_command))
+if __name__ == "__main__":
     app.run_polling()
