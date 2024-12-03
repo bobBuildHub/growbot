@@ -1,22 +1,3 @@
-<<<<<<< HEAD
-# Dockerfile for GrowBot
-FROM python:3.9-slim
-
-# Set the working directory
-WORKDIR /app
-
-# Copy application files to the container
-COPY . /app
-
-# Install dependencies
-
-
-# Expose port 5000 for the Flask application
-EXPOSE 5000
-
-# Start the application
-CMD ["python", "run.py"]
-=======
 # Use Python as the base image
 FROM python:3.9-slim
 
@@ -38,4 +19,3 @@ ENV TELEGRAM_WEBHOOK_URL=https://your-webhook-url/
 
 # Run the bot
 CMD ["python", "bot.py"]
->>>>>>> 1c802b13 (Updated project files and features.)

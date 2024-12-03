@@ -1,0 +1,7 @@
+python-telegram-bot
+pymongo
+flask
+gunicorn
+
+# Add other dependencies here
+

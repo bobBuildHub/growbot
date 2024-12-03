@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="add-user-container">
+        <h2>Add User</h2>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flash-messages">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('add_user') }}" method="POST">
+            <label for="telegram_id">Telegram ID</label>
+            <input type="text" id="telegram_id" name="telegram_id" required><br>
+
+            <button type="submit">Add User</button>
+        </form>
+    </div>
+</body>
+</html>

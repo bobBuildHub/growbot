@@ -1,103 +1,59 @@
-import logging
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
+import subprocess
+import time
+import sys
 
-# Initialize logging
-logging.basicConfig(
-    filename="logs/growbot.log",
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+def start_flask_server():
+    """Start the Flask Web Server."""
+    print("Starting Flask Web Server...")
+    flask_process = subprocess.Popen(['start', '/B', 'python', '-m', 'flask', 'run', '--host=0.0.0.0', '--port=5000'], shell=True)
+    time.sleep(10)  # Wait for Flask to initialize
+    return flask_process
 
+def start_telegram_bot():
+    """Start the Telegram Bot."""
+    print("Starting Telegram Bot...")
+    bot_process = subprocess.Popen(['start', '/B', 'python', 'C:\\Users\\drost\\Desktop\\GROW\\growbot\\complete_project_v2\\bot\\bots\\customer_bot.py'], shell=True)
+    time.sleep(5)  # Wait for bot to initialize
+    return bot_process
 
-class GrowBot:
-    """
-    A Telegram bot with buttons for UI/UX and appropriate action confirmations.
-    """
-
-    def __init__(self, token):
-        self.token = token
-
-    async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        """
-        Handle the /start command.
-        """
-        user = update.effective_user
-        keyboard = [
-            [
-                InlineKeyboardButton("Start GrowBot", callback_data="start"),
-                InlineKeyboardButton("Stop GrowBot", callback_data="stop"),
-            ],
-            [
-                InlineKeyboardButton("Status", callback_data="status"),
-                InlineKeyboardButton("Help", callback_data="help"),
-            ],
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-
-        await update.message.reply_text(
-            f"Hi {user.first_name}, I am GrowBot! Use the buttons below to manage the bot:",
-            reply_markup=reply_markup,
-        )
-        logger.info(f"User {user.id} started the bot.")
-
-    async def button_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        """
-        Handle button interactions.
-        """
-        query = update.callback_query
-        await query.answer()  # Acknowledge the button press
-
-        if query.data == "start":
-            logger.info("Start GrowBot action triggered.")
-            await query.edit_message_text("✅ GrowBot has been started successfully!")
-        elif query.data == "stop":
-            logger.info("Stop GrowBot action triggered.")
-            await query.edit_message_text("❌ GrowBot has been stopped.")
-        elif query.data == "status":
-            logger.info("Status action triggered.")
-            await query.edit_message_text("ℹ️ GrowBot is currently running.")
-        elif query.data == "help":
-            logger.info("Help action triggered.")
-            await query.edit_message_text(
-                "ℹ️ *GrowBot Help Menu*\n"
-                "1. Start GrowBot: Launch the GrowBot service.\n"
-                "2. Stop GrowBot: Shut down the GrowBot service.\n"
-                "3. Status: Check if GrowBot is running.\n"
-                "4. Contact support for advanced issues.",
-                parse_mode="Markdown",
-            )
-        else:
-            logger.warning(f"Unknown action: {query.data}")
-            await query.edit_message_text("⚠️ Unknown action. Please try again.")
-
-    def run(self):
-        """
-        Start the Telegram bot application.
-        """
-        application = ApplicationBuilder().token(self.token).build()
-
-        # Handlers
-        application.add_handler(CommandHandler("start", self.start))
-        application.add_handler(CallbackQueryHandler(self.button_handler))
-
-        # Run the bot
-        logger.info("GrowBot is starting...")
-        application.run_polling()
-
-
-if __name__ == "__main__":
-    # Telegram bot token
-    BOT_TOKEN = "7586067879:AAFtBcPcu8_eQYVmUqmpDltASX7TLZObwkI"
-
-    # Create necessary directories
-    import os
-    os.makedirs("logs", exist_ok=True)
-
+def check_flask_server():
+    """Check if the Flask server is running by sending a request."""
+    import requests
     try:
-        growbot = GrowBot(BOT_TOKEN)
-        growbot.run()
+        response = requests.get('http://localhost:5000')
+        if response.status_code == 200:
+            print("Flask Web Server started successfully.")
+        else:
+            print("ERROR: Flask Web Server is not reachable.")
+            sys.exit(1)
     except Exception as e:
-        logger.critical(f"Critical error: {e}")
-        print(f"Critical error: {e}")
+        print(f"ERROR: Unable to reach Flask Web Server. {str(e)}")
+        sys.exit(1)
+
+def check_telegram_bot():
+    """Check if the Telegram bot is running."""
+    import requests
+    bot_token = "7586067879:AAFtBcPcu8_eQYVmUqmpDltASX7TLZObwkI"
+    try:
+        response = requests.get(f"https://api.telegram.org/bot{bot_token}/getMe")
+        if response.status_code == 200:
+            print("Telegram Bot started successfully.")
+        else:
+            print("ERROR: Telegram Bot is not reachable.")
+            sys.exit(1)
+    except Exception as e:
+        print(f"ERROR: Unable to connect to Telegram Bot. {str(e)}")
+        sys.exit(1)
+
+if __name__ == '__main__':
+    # Start Flask server and Telegram bot
+    flask_process = start_flask_server()
+    bot_process = start_telegram_bot()
+
+    # Check Flask server and bot
+    check_flask_server()
+    check_telegram_bot()
+
+    print("Both Flask Web Server and Telegram Bot are running!")
+    flask_process.wait()
+    bot_process.wait()
