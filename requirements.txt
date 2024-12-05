@@ -5,3 +5,5 @@ requests==2.28.1
 python-telegram-bot==20.3
 requests
 gunicorn
+Werkzeug==2.0.3
+

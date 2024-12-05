@@ -37,5 +37,5 @@ ENV TELEGRAM_TOKEN=7586067879:AAFtBcPcu8_eQYVmUqmpDltASX7TLZObwkI
 ENV TELEGRAM_WEBHOOK_URL=https://your-webhook-url/
 
 # Run the bot
-CMD ["python", "bot.py"]
+CMD ["python", "-m", "web.app"]
 >>>>>>> 1c802b13 (Updated project files and features.)
