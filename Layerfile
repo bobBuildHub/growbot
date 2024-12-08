@@ -1,4 +1,4 @@
-# This is a webapp.io configuration for Docker with GrowBot
+# Base layer with Ubuntu and Docker
 FROM vm/ubuntu:18.04
 
 # Install Docker
@@ -10,21 +10,21 @@ RUN apt-get update && apt-get install -y \
     sudo && \
     sudo mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" |\
-    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-    apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list && \
+    apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io && \
+    apt-get clean
 
-# Set up the environment
+# Set working directory
 WORKDIR /app
 
-# Copy the repository files into the VM
+# Copy repository files into the VM
 COPY . /app
 
-# Build the Docker image
-RUN docker build -t growbot-image .
+# Debug: List the files to ensure everything is copied
+RUN ls -la /app
+
+# Build Docker image
+RUN docker build -t growbot-image -f /app/Dockerfile /app
 
 # Run the container
 RUN docker run -d -p 5000:5000 growbot-image
-
-# Expose the Flask application
-#EXPOSE WEBSITE http://localhost:5000
