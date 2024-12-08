@@ -4,22 +4,30 @@ services:
   web:
     build:
       context: ./web
-      dockerfile: Dockerfile.web
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     networks:
       - app-network
     depends_on:
       - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/mydatabase
+      - FLASK_ENV=production
 
   bot:
     build:
       context: ./bot
-      dockerfile: Dockerfile.bot
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
     networks:
       - app-network
     depends_on:
       - mongodb
+    environment:
+    - TELEGRAM_TOKEN=7586067879:AAFtBcPcu8_eQYVmUqmpDltASX7TLZObwkI  # Replace with your bot token
+    - MONGO_URI=mongodb+srv://bob:bobbrowa@gbob.4dq6l.mongodb.net/Gbob?retryWrites=true&w=majority
 
   mongodb:
     image: mongo:latest
@@ -28,6 +36,12 @@ services:
       - "27017:27017"
     networks:
       - app-network
+    volumes:
+      - mongo-data:/data/db
 
 networks:
   app-network:
+
+volumes:
+  mongo-data: {}
+
